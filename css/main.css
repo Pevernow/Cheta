@@ -1,0 +1,16 @@
+.textarea{
+    width: 400px;
+    min-height: 20px;
+    max-height: 300px;
+    _height: 120px;
+    padding: 3px;
+    outline: 0;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 2px;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color:transparent;
+    border: 0px;
+}
