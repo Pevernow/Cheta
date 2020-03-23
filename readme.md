@@ -1,5 +1,5 @@
-#Cheta
-###A powerful novel editor
+# Cheta
+### A powerful novel editor
 Using uikit & jquery
 更新日志：
 0.3.6 2020/3/20:
