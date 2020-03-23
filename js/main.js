@@ -16,31 +16,12 @@ function flushdoc(t) {
   var data = JSON.parse($(t).attr("docs"));
   $("#texts").empty();
   for (var i = 0, size = data.length; i < size; i++) {
-    $("#texts").append('<li class="text uk-text-break">' + data[i] + "</li>");
+    $("#texts").append('<li class="text uk-text-break textarea" id="input" contenteditable="true">' + data[i] + "</li>");
   }
   try {
     $("#editing").removeAttr("id");
   } catch {}
   $(t).attr("id", "editing");
-}
-function inputdo() {
-  $("body").click(function(e) {
-    if (e.target.id != "btn" && e.target.id != "input")
-      if (
-        $("#input")
-          .text()
-          .indexOf(" ") >= 0 ||
-        $("#input").text() == ""
-      ) {
-        $("#input")
-          .parent()
-          .remove();
-      } else {
-        $("#input")
-          .parent()
-          .html($("#input").text());
-      }
-  });
 }
 //当按下回车时执行换行编辑操作
 //Buging!!!
@@ -55,20 +36,13 @@ $(document).keyup(function(e) {
         .indexOf(" ") >= 0 ||
       $("#input").text() == ""
     ) {
-      $("#input")
-        .parent()
-        .remove();
-    } else {
-      $("#input")
-        .parent()
-        .html($("#input").text());
+      $("#editor")
+        .children(":last-child")
+        .append(
+          '<li class="text uk-text-break textarea" id="input" contenteditable="true"></li>'
+        );
+      $("#input")[0].focus();
     }
-    $("#editor")
-      .children(":last-child")
-      .append(
-        '<li class="text uk-text-break" onclick="editline(this)"><div id="input" class="textarea" contenteditable="true" onclick="inputdo()"></div></li>'
-      );
-    $("#input")[0].focus();
   }
 });
 //下载json文件
@@ -102,34 +76,26 @@ function savearea() {
 //保存文件
 //（暂未实现）
 function eachmenu(docs, out) {
-  $(docs).children().each(function(i, dom) {
-    if ($(dom).children("a").length == 0) {
-      var childout=[dom.innerText.split(/[\s\n]/)[0]];
-      eachmenu($(dom).children()[0],childout);
-      out.push(childout);
-    }else{
-      var tmptexts=$(dom).attr("docs");
-      var tmpname=$(dom).children("a").text();
-      out.push({name: tmpname,data: tmptexts});
-    }
-  });
+  $(docs)
+    .children()
+    .each(function(i, dom) {
+      if ($(dom).children("a").length == 0) {
+        var childout = [dom.innerText.split(/[\s\n]/)[0]];
+        eachmenu($(dom).children()[0], childout);
+        out.push(childout);
+      } else {
+        var tmptexts = $(dom).attr("docs");
+        var tmpname = $(dom)
+          .children("a")
+          .text();
+        out.push({ name: tmpname, data: tmptexts });
+      }
+    });
 }
 function savefile() {
-  var out = {menu: ["main"]};
-  eachmenu($("#menu")[0],out.menu);
+  var out = { menu: ["main"] };
+  eachmenu($("#menu")[0], out.menu);
   downFile(JSON.stringify(out), "New.che");
-}
-//编辑点击的行
-//buging!!!
-//element是编辑器中的一行
-function editline(element) {
-  if ($(element).children().length == 0) {
-    $(element).html(
-      '<li class="text uk-text-break" onclick="editline(this)"><div id="input" class="textarea" contenteditable="true" onclick="inputdo()">' +
-        $(element).html() +
-        "</div></li>"
-    );
-  }
 }
 //加载目录（递归按层级加载)
 //入参： menu 当前层对象
@@ -148,9 +114,9 @@ function loadmenu(menu, doc) {
       }
     } else {
       $(doc).append(
-        "<li docs='"+
+        "<li docs='" +
           menu[i]["data"] +
-          "\' onclick=flushdoc(this)><a href='#'>" +
+          "' onclick=flushdoc(this)><a href='#'>" +
           menu[i]["name"] +
           "</a></li>"
       );
