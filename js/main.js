@@ -148,9 +148,9 @@ function loadmenu(menu, doc) {
       }
     } else {
       $(doc).append(
-        '<li docs="' +
+        "<li docs='"+
           menu[i]["data"] +
-          "\" onclick=flushdoc(this)><a href='#'>" +
+          "\' onclick=flushdoc(this)><a href='#'>" +
           menu[i]["name"] +
           "</a></li>"
       );
