@@ -5,6 +5,7 @@
     <!--<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Sans+SC:100,300,400,500,700,900">-->
     <link rel="stylesheet" type="text/css" href="css/uikit.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/5.12.0/css/all.min.css"></script>
     <script src="https://js.fundebug.cn/fundebug.2.0.0.min.js" apikey="6e90020b1ac485c8bb1993bd7336d3b02db6386351497cd638faa2e1eccce2f1" crossorigin="anonymous" async></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/uikit.min.js"></script>
@@ -12,7 +13,7 @@
   </head>
   <body>
     <div id="header">
-      <nav class="uk-navbar-container uk-margin" uk-navbar="mode: click">
+      <nav class="uk-navbar-container" uk-navbar="mode: click">
         <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
             <h1>Cheta</h1>
@@ -22,12 +23,18 @@
                 <ul class="uk-nav uk-navbar-dropdown-nav">
                   <div class="js-upload" uk-form-custom>
                     <input type="file" id="open" onchange="openfile()" accept=".che"/><nobr>
-                      <h5 tabindex="-1" onchange="alert();">
+                      <h5 tabindex="-1">
+                        <i class="far fa-file"></i>
                         打开
                       </h5>
                     </nobr>
                   </div>
-                  <li class="uk-active" onclick="savefile()"><h5>保存</h5></li>
+                  <li class="uk-active" onclick="savefile()">
+                    <h5>
+                      <i class="far fa-save"></i>
+                      保存
+                    </h5>
+                  </li>
                 </ul>
               </div>
             </li>
@@ -43,7 +50,7 @@
         class="uk-width-1-4 uk-card uk-card-default uk-card-body"
       >
         <ul uk-tab>
-          <li><a href="#">目录</a></li>
+          <li><a href="#"><i class="fas fa-list-ul"></i>目录</a></li>
           <li><a href="#">Item</a></li>
           <li><a href="#">Item</a></li>
         </ul>

@@ -1,4 +1,11 @@
-$("document").ready(function() {});
+$("document").ready(function() {
+  $("#editor")
+    .children(":last-child")
+    .append(
+      '<li class="text uk-text-break textarea" id="input" contenteditable="true"></li>'
+    );
+  $("#input")[0].focus();
+});
 //打开文件时调用此函数
 function openfile() {
   const reader = new FileReader();
@@ -16,7 +23,11 @@ function flushdoc(t) {
   var data = JSON.parse($(t).attr("docs"));
   $("#texts").empty();
   for (var i = 0, size = data.length; i < size; i++) {
-    $("#texts").append('<li class="text uk-text-break textarea" id="input" contenteditable="true">' + data[i] + "</li>");
+    $("#texts").append(
+      '<li class="text uk-text-break textarea" id="input" contenteditable="true">' +
+        data[i] +
+        "</li>"
+    );
   }
   try {
     $("#editing").removeAttr("id");
@@ -30,12 +41,9 @@ $(document).keyup(function(e) {
   if (e.keyCode == 13) {
     //按键信息对象以参数的形式传递进来了
     //此处编写用户敲回车后的代码
-    if (
-      $("#input")
-        .text()
-        .indexOf(" ") >= 0 ||
-      $("#input").text() == ""
-    ) {
+    if ($("#input").text() != "") {
+      $("#input").text($("#input").text());
+      $("#input").removeAttr("id");
       $("#editor")
         .children(":last-child")
         .append(
