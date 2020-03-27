@@ -31,11 +31,12 @@ function flushdoc(t) {
   }
   try {
     $("#editing").removeAttr("id");
+    $("#editing").removeClass("uk-active");
   } catch {}
   $(t).attr("id", "editing");
+  $(t).addClass("uk-active");
 }
 //当按下回车时执行换行编辑操作
-//Buging!!!
 $(document).keyup(function(e) {
   //捕获文档对象的按键弹起事件
   if (e.keyCode == 13) {
@@ -82,7 +83,6 @@ function savearea() {
   $("#editing").attr("onclick", "flushdoc(this)");
 }
 //保存文件
-//（暂未实现）
 function eachmenu(docs, out) {
   $(docs)
     .children()
@@ -113,7 +113,7 @@ function loadmenu(menu, doc) {
     if (Object.prototype.toString.call(menu[i]) == "[object Array]") {
       if (menu[i][0] != "main") {
         $(doc).append(
-          $("<li>" + menu[i][0] + "</li>").append(
+          $("<li contenteditable='true'>" + menu[i][0] + "</li>").append(
             loadmenu(menu[i], document.createElement("ul"))
           )
         );
@@ -124,7 +124,7 @@ function loadmenu(menu, doc) {
       $(doc).append(
         "<li docs='" +
           menu[i]["data"] +
-          "' onclick=flushdoc(this)><a href='#'>" +
+          "' onclick=flushdoc(this)><a contenteditable='true'>" +
           menu[i]["name"] +
           "</a></li>"
       );
@@ -134,4 +134,12 @@ function loadmenu(menu, doc) {
     .children()
     .addClass("uk-margin-remove-top");
   return doc;
+}
+function appendPart(t) {
+  if (t == undefined) {
+    t = document.getElementById("menu");
+  }
+  $(t).append(
+    "<li docs='[]' onclick=flushdoc(this)><a href='#' contenteditable='true'></a></li>"
+  );
 }

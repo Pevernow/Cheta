@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Cheta0.39.9</title>
+    <title>Cheta0.50</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!--<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Sans+SC:100,300,400,500,700,900">-->
     <link rel="stylesheet" type="text/css" href="css/uikit.min.css" />
@@ -19,7 +19,7 @@
             <h1>Cheta</h1>
             <li>
               <a href="#">文件</a>
-              <div class="uk-navbar-dropdown">
+              <div class="uk-navbar-dropdown" style="width: auto;padding-bottom: 0%;padding-top: 2%;">
                 <ul class="uk-nav uk-navbar-dropdown-nav">
                   <div class="js-upload" uk-form-custom>
                     <input type="file" id="open" onchange="openfile()" accept=".che"/><nobr>
@@ -46,7 +46,7 @@
     <div id="main" style="background-color: #FFCCCC" uk-grid>
       <div
         id="tool"
-        style="background-color: #FFFFCC"
+        style="background-color: #FFFFCC;padding-top: 0%;"
         class="uk-width-1-4 uk-card uk-card-default uk-card-body"
       >
         <ul uk-tab>
@@ -57,6 +57,10 @@
 
         <ul class="uk-switcher uk-margin">
           <ul id="menu" class="uk-margin-remove-top">
+            <ul class="uk-iconnav">
+              <li onclick="appendPart(document.getElementById('editing'))"><i class="fas fa-plus"></i></li>
+            <li onclick="$('#editing').remove()"><i class="fas fa-trash-alt"></i></li>
+            </ul>
           </ul>
           <li>
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
