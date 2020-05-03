@@ -1,24 +1,26 @@
 <html>
   <head>
-    <title>Cheta0.50</title>
+    <title>Cheta0.75</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!--<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Sans+SC:100,300,400,500,700,900">-->
     <link rel="stylesheet" type="text/css" href="css/uikit.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/Rclick.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/5.12.0/css/all.min.css"></script>
     <script src="https://js.fundebug.cn/fundebug.2.0.0.min.js" apikey="6e90020b1ac485c8bb1993bd7336d3b02db6386351497cd638faa2e1eccce2f1" crossorigin="anonymous" async></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/uikit.min.js"></script>
+    <script src="js/Rclick.js"></script>
     <script src="js/main.js"></script>
   </head>
   <body>
     <div id="header">
-      <nav class="uk-navbar-container" uk-navbar="mode: click">
+      <nav class="uk-navbar-container uk-margin-remove-vertical" uk-navbar="mode: click">
         <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
-            <h1>Cheta</h1>
+            <h3 style="margin-block-end: 0em">Cheta</h3>
             <li>
-              <a href="#">文件</a>
+              <a class="uk-margin-small-top" style="min-height: 0%;">文件</a>
               <div class="uk-navbar-dropdown" style="width: auto;padding-bottom: 0%;padding-top: 2%;">
                 <ul class="uk-nav uk-navbar-dropdown-nav">
                   <div class="js-upload" uk-form-custom>
@@ -38,9 +40,10 @@
                 </ul>
               </div>
             </li>
-            <li><a href="#">Item</a></li>
+            <li><a class="uk-margin-small-top" style="min-height: 0%;">Item</a></li>
           </ul>
         </div>
+        <div class="uk-navbar-center"><p id="title"></p></div>
       </nav>
     </div>
     <div id="main" style="background-color: #FFCCCC" uk-grid>
@@ -50,16 +53,17 @@
         class="uk-width-1-4 uk-card uk-card-default uk-card-body"
       >
         <ul uk-tab>
-          <li><a href="#"><i class="fas fa-list-ul"></i>目录</a></li>
-          <li><a href="#">Item</a></li>
-          <li><a href="#">Item</a></li>
+          <li><a><i class="fas fa-list-ul"></i>目录</a></li>
+          <li><a>Item</a></li>
+          <li><a>Item</a></li>
         </ul>
 
         <ul class="uk-switcher uk-margin">
           <ul id="menu" class="uk-margin-remove-top">
-            <ul class="uk-iconnav">
+            <ul class="uk-iconnav uk-text-center">
               <li onclick="appendPart(document.getElementById('editing'))"><i class="fas fa-plus"></i></li>
-            <li onclick="$('#editing').remove()"><i class="fas fa-trash-alt"></i></li>
+              <li onclick="appendFolder(document.getElementById('editing'))"><i class="fas fa-folder-plus"></i></li>
+              <li onclick="$('#editing').remove()"><i class="fas fa-trash-alt"></i></li>
             </ul>
           </ul>
           <li>
@@ -77,8 +81,12 @@
         style="background-color: #CCFFFF"
         class="uk-width-3-4 uk-card uk-card-default uk-card-body"
       >
-        <ul id="texts" class="uk-list uk-list-bullet"></ul>
       </div>
     </div>
+    <ul class="contextmenu">
+      <li><a onclick="$('#rightclick').attr('contenteditable','true')">重命名</a></li>
+      <li><a onclick="$('body').append('<div id=\"ualert\" class=\"uk-alert-warning uk-width-1-3 uk-animation-shake\" style=\"position: fixed;left: 40%;top: 10%;\" uk-alert><a class=\"uk-alert-close\" uk-close onclick=\"$(this).removeClass(\'uk-animation-shake\')\"></a><p class=\"uk-text-bold uk-text-primary uk-text-break\"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p></div>')">删除</a></li>
+  </ul>
+  <div class="mask"></div>
   </body>
 </html>

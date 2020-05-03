@@ -1,59 +1,48 @@
-$("document").ready(function() {
-  $("#editor")
-    .children(":last-child")
-    .append(
-      '<li class="text uk-text-break textarea" id="input" contenteditable="true"></li>'
-    );
-  $("#input")[0].focus();
+$(document).ready(function () {
+  name = "新书";
 });
+
 //打开文件时调用此函数
 function openfile() {
   const reader = new FileReader();
   reader.readAsText(document.getElementById("open").files[0], "utf8"); // input.files[0]为第一个文件
+  name = document.getElementById("open").files[0].name.substr(0,document.getElementById("open").files[0].name.indexOf("."));
   reader.onload = () => {
     data = JSON.parse(reader.result); // reader.result为获取结果
     loadmenu(data.menu, document.getElementById("menu"));
+    Rcontextmenu();
   };
 }
 //当点击目录中的可编辑项目时调用此函数
 //作用：调用savearea保存旧数据，并把对应的docs刷新到编辑器主页
 //入参： t this 是当前目录项的指针，用于添加id以标记编辑项
 function flushdoc(t) {
+  stopPropagation()
   savearea();
-  var data = JSON.parse($(t).attr("docs"));
-  $("#texts").empty();
-  for (var i = 0, size = data.length; i < size; i++) {
-    $("#texts").append(
-      '<li class="text uk-text-break textarea" id="input" contenteditable="true">' +
-        data[i] +
-        "</li>"
-    );
+  if($(t).attr("chetype")=="folder"){
+    var data = "";
+    $(t).children("li").each(function(){
+      data+=$(this).attr("docs");
+    });
+  }else{
+    var data = $(t).attr("docs");
   }
+  $("#editor").empty();
+  $("#editor").append(
+    '<textarea style="overflow:hidden; resize:none;max-height: 100%" rows="18" class="textarea" type="text" name="name">' +
+      data +
+      "</textarea>"
+  );
   try {
-    $("#editing").removeAttr("id");
     $("#editing").removeClass("uk-active");
+    $("#editing").removeAttr("id");
   } catch {}
   $(t).attr("id", "editing");
   $(t).addClass("uk-active");
+  $("#title").text($(t).text());
+  $("title").text($(t).text());
+  $("#editor").keyup()
 }
-//当按下回车时执行换行编辑操作
-$(document).keyup(function(e) {
-  //捕获文档对象的按键弹起事件
-  if (e.keyCode == 13) {
-    //按键信息对象以参数的形式传递进来了
-    //此处编写用户敲回车后的代码
-    if ($("#input").text() != "") {
-      $("#input").text($("#input").text());
-      $("#input").removeAttr("id");
-      $("#editor")
-        .children(":last-child")
-        .append(
-          '<li class="text uk-text-break textarea" id="input" contenteditable="true"></li>'
-        );
-      $("#input")[0].focus();
-    }
-  }
-});
 //下载json文件
 //入参: content json文件
 //      fileName 文件名
@@ -72,38 +61,40 @@ function downFile(content, fileName) {
 }
 //保存当前编辑器部分数据到当前目录索引的位置
 function savearea() {
-  var out = [];
+  /*
   $("#editor")
-    .children(".uk-list")
     .children()
     .each(function() {
-      out.push(this.innerText);
+      out+=this.innerText;
     });
-  $("#editing").attr("docs", JSON.stringify(out));
+  */
+  var out = $("#editor").children().val();
+  $("#editing").attr("docs", out);
   $("#editing").attr("onclick", "flushdoc(this)");
+  console.log(out);
 }
 //保存文件
 function eachmenu(docs, out) {
   $(docs)
     .children()
-    .each(function(i, dom) {
+    .each(function (i, dom) {
       if ($(dom).children("a").length == 0) {
         var childout = [dom.innerText.split(/[\s\n]/)[0]];
         eachmenu($(dom).children()[0], childout);
         out.push(childout);
       } else {
         var tmptexts = $(dom).attr("docs");
-        var tmpname = $(dom)
-          .children("a")
-          .text();
+        var tmpname = $(dom).children("a").text();
         out.push({ name: tmpname, data: tmptexts });
       }
     });
 }
 function savefile() {
   var out = { menu: ["main"] };
+  savearea();
   eachmenu($("#menu")[0], out.menu);
-  downFile(JSON.stringify(out), "New.che");
+  out.menu.splice(1,1);
+  downFile(JSON.stringify(out), name+".che");
 }
 //加载目录（递归按层级加载)
 //入参： menu 当前层对象
@@ -113,7 +104,7 @@ function loadmenu(menu, doc) {
     if (Object.prototype.toString.call(menu[i]) == "[object Array]") {
       if (menu[i][0] != "main") {
         $(doc).append(
-          $("<li contenteditable='true'>" + menu[i][0] + "</li>").append(
+          $("<li contenteditable='false'>" + menu[i][0] + "</li>").append(
             loadmenu(menu[i], document.createElement("ul"))
           )
         );
@@ -124,22 +115,51 @@ function loadmenu(menu, doc) {
       $(doc).append(
         "<li docs='" +
           menu[i]["data"] +
-          "' onclick=flushdoc(this)><a contenteditable='true'>" +
+          "' onclick=flushdoc(this)><a contenteditable='false'>" +
           menu[i]["name"] +
           "</a></li>"
       );
     }
   }
-  $(doc)
-    .children()
-    .addClass("uk-margin-remove-top");
+  $(doc).children().addClass("uk-margin-remove-top");
   return doc;
 }
 function appendPart(t) {
   if (t == undefined) {
     t = document.getElementById("menu");
+    $(t).attr("chetype","folder");
   }
-  $(t).append(
-    "<li docs='[]' onclick=flushdoc(this)><a href='#' contenteditable='true'></a></li>"
-  );
+  if ($(t).attr("chetype") == "folder") {
+    $(t).append(
+      "<li docs='' onclick=flushdoc(this)><a contenteditable='true'>新章节</a></li>"
+    );
+  } else {
+    $(t).after(
+      "<li docs='' onclick=flushdoc(this)><a contenteditable='true'>新章节</a></li>"
+    );
+  }
+}
+function appendFolder(t) {
+  if (t == undefined) {
+    t = document.getElementById("menu");
+    $(t).attr("chetype","folder");
+  }
+  if ($(t).attr("chetype") == "folder") {
+    $(t).append(
+      "<li><ui class=\"uk-list uk-list-bullet\" chetype='folder' onclick=\"flushdoc(this)\"><a contenteditable='true'>新分卷</a></ui></li>"
+    );
+  } else {
+    $(t).after(
+      "<li><ui class=\"uk-list uk-list-bullet\" chetype='folder' onclick=\"flushdoc(this)\"><a contenteditable='true'>新分卷</a></ui></li>"
+    );
+  }
+}
+function stopPropagation(){
+  var e=(event)?event:window.event;
+  if (window.event) {
+    e.cancelBubble=true;// ie下阻止冒泡
+   } else {
+    //e.preventDefault();
+    e.stopPropagation();// 其它浏览器下阻止冒泡
+   }
 }
